@@ -1,26 +1,26 @@
 <template>
   <tr>
-    <td>Application</td>
-    <td>SUSE 10.1 BETA1 OSS DV .iso</td>
-    <td>02/02/2021</td>
+    <td>{{ contentType }}</td>
+    <td>{{ title }}</td>
+    <td>{{ dateUploaded }}</td>
     <td>
-      <span class="magnetSpan"
-        ><a
-          href="magnet:?xt=urn:btih:186BEB2F74B525685E7EF7543F8696E7F968276A&amp;dn=SUSE%2010.1%20BETA1%20OSS%20DVD%20.iso&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce"
-          >🧲</a
-        ></span
-      >
+      <span class="magnetSpan"> <a v-bind:href="magnetLink">🧲</a></span>
     </td>
-    <td>10</td>
-    <td>10</td>
+    <td>{{seeders}}</td>
+    <td>{{leechers}}</td>
   </tr>
 </template>
 
 <script>
 export default {
-  name: "HelloWorld",
+  name: "TorrentItem ",
   props: {
-    msg: String,
+    contentType: String,
+    title: String,
+    dateUploaded: String,
+    magnetLink: String,
+    seeders: Number,
+    leechers: Number,
   },
 };
 </script>
@@ -37,5 +37,4 @@ body {
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
-
 </style>
