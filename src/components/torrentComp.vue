@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: "TorrentItem ",
+  name: "TorrentComp ",
   props: {
     contentType: String,
     title: String,
