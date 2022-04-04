@@ -23,6 +23,7 @@
 
 <script>
 import torrentComp from "./torrentComp.vue";
+import axios from "axios";
 
 export default {
   name: "TorrentComp ",
@@ -31,11 +32,44 @@ export default {
     title: String,
     dateUploaded: String,
     magnetLink: String,
-    seeders: Number,
-    leechers: Number,
+    seeders: String,
+    leechers: String,
+  },
+  data() {
+    return {
+      response: Object,
+    };
   },
   components: {
     torrentComp,
+  },
+
+  async mounted() {
+    
+    const endpoint = "https://arweave.net/graphql";
+    const headers = {
+      "content-type": "application/json",
+    };
+    const graphqlQuery = {
+      query: `{
+  transactions(tags: [{ name: "ArrTorrent", values: "" }]) {
+    edges {
+      node {
+        id
+      }
+    }
+  }
+}`,
+    };
+
+    const response = await axios({
+      url: endpoint,
+      method: "POST",
+      headers: headers,
+      data: graphqlQuery,
+    });
+
+    console.log(response.data);
   },
 };
 </script>

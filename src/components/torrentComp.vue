@@ -19,8 +19,8 @@ export default {
     title: String,
     dateUploaded: String,
     magnetLink: String,
-    seeders: Number,
-    leechers: Number,
+    seeders: String,
+    leechers: String,
   },
 };
 </script>
