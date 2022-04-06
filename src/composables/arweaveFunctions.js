@@ -7,7 +7,7 @@ export async function getRecentTxs() {
         "content-type": "application/json",
     };
     const graphqlQuery = {
-            query: `{
+        query: `{
     transactions(tags: [{ name: "ArrTorrent", values: "" }]) {
         edges {
         node {
@@ -18,18 +18,11 @@ export async function getRecentTxs() {
     }`,
     };
 
-    try {
-        let res = await axios({
-            url: endpoint,
-            method: "POST",
-            headers: headers,
-            data: graphqlQuery,
-        });
-
-        let data = res.data;
-        return data;
-    } catch (error) {
-        console.log(error.response);
-        return error.response;
-    }
+    let res = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: headers,
+        data: graphqlQuery,
+    });
+    return res.data
 }

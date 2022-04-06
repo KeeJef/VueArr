@@ -46,7 +46,13 @@ export default {
 
   async mounted() {
 
-    console.log(await getRecentTxs())
+    try {
+      console.log(await getRecentTxs())
+    } catch (error) {
+      console.log(error)
+    }
+
+    
     
   },
 };
