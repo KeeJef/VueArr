@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { getRecentTxs } from '../composables/arweaveFunctions.js'
+import { getRecentTxIds,getTxFromId } from '../composables/arweaveFunctions.js'
 import torrentComp from "./torrentComp.vue";
 
 export default {
@@ -38,6 +38,7 @@ export default {
   data() {
     return {
       response: Object,
+      arweaveDataArray : []
     };
   },
   components: {
@@ -47,12 +48,23 @@ export default {
   async mounted() {
 
     try {
-      console.log(await getRecentTxs())
+      var txidArray = await getRecentTxIds()
     } catch (error) {
       console.log(error)
     }
 
-    
+    for (let index = 0; index < txidArray.length; index++) {
+      const element = txidArray[index];
+
+      try {
+        this.arweaveDataArray.push(getTxFromId(element)) 
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+   
+
     
   },
 };
