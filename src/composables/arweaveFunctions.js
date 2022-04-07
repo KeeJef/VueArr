@@ -42,7 +42,13 @@ export async function getRecentTxIds() {
 export async function getTxFromId(txid) {
 
     var data = await arweave.transactions.getData(txid)
-    console.log(atob(data))
-    return atob(data)
 
+    try {
+        data = JSON.parse(atob(data))
+    } catch (error) {
+        console.log(error)
+        return
+    }
+    
+    return data
 }

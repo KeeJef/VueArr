@@ -17,6 +17,8 @@
         leechers="10"
         magnetLink="magnet:?xt=urn:btih:186BEB2F74B525685E7EF7543F8696E7F968276A&amp;dn=SUSE%2010.1%20BETA1%20OSS%20DVD%20.iso&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce"
       />
+
+      {{arweaveDataArray}}
     </table>
   </div>
 </template>
@@ -37,12 +39,14 @@ export default {
   },
   data() {
     return {
-      response: Object,
       arweaveDataArray : []
     };
   },
   components: {
     torrentComp,
+  },
+  methods :{
+
   },
 
   async mounted() {
@@ -57,14 +61,14 @@ export default {
       const element = txidArray[index];
 
       try {
-        this.arweaveDataArray.push(getTxFromId(element)) 
+        let txData = await getTxFromId(element)
+        this.arweaveDataArray.push(txData)
+
       } catch (error) {
         console.log(error)
       }
+      
     }
-
-   
-
     
   },
 };
