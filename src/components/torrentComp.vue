@@ -12,6 +12,8 @@
 </template>
 
 <script>
+import {getSeedersAndLeechers} from '../composables/arweaveFunctions.js'
+
 export default {
   name: "TorrentComp ",
   props: {
@@ -19,9 +21,23 @@ export default {
     title: String,
     dateUploaded: String,
     magnetLink: String,
-    seeders: String,
-    leechers: String,
   },
+  data(){
+    return{
+      seeders: "",
+      leechers: ""
+    }
+  },
+  async mounted () {
+
+    try {
+      var seedLeechData = await getSeedersAndLeechers(btoa(this.magnetLink))
+      this.seeders = await seedLeechData.seeds 
+      this.leechers = await seedLeechData.leechers
+    } catch (error) {
+      console.log(error)
+    }
+  }
 };
 </script>
 

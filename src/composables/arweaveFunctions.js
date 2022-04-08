@@ -52,3 +52,9 @@ export async function getTxFromId(txid) {
     
     return data
 }
+
+export async function getSeedersAndLeechers(magnetLink){
+    let response = await axios.get('https://cryptocommit.org/m/single?magnet='+ magnetLink);
+    console.log( await response)
+    return response.data
+}

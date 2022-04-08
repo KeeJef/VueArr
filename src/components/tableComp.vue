@@ -9,16 +9,7 @@
         <th>Seeders</th>
         <th>Leachers</th>
       </tr>
-      <torrentComp
-        contentType="Application"
-        title="SUSE 10.1 BETA1 OSS DV .iso"
-        dateUploaded="01/02/2021"
-        seeders="5"
-        leechers="10"
-        magnetLink="magnet:?xt=urn:btih:186BEB2F74B525685E7EF7543F8696E7F968276A&amp;dn=SUSE%2010.1%20BETA1%20OSS%20DVD%20.iso&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce"
-      />
-
-      {{arweaveDataArray}}
+      <torrentComp v-for="arweaveData in arweaveDataArray" :key="arweaveData.id" :contentType = "arweaveData.contentType" :title = "arweaveData.title" :dateUploaded = "arweaveData.dateUploaded" :magnetLink = "arweaveData.magnetLink"/>
     </table>
   </div>
 </template>
@@ -34,12 +25,12 @@ export default {
     title: String,
     dateUploaded: String,
     magnetLink: String,
-    seeders: String,
-    leechers: String,
   },
   data() {
     return {
-      arweaveDataArray : []
+      arweaveDataArray : [
+        
+      ]
     };
   },
   components: {
@@ -62,7 +53,7 @@ export default {
 
       try {
         let txData = await getTxFromId(element)
-        this.arweaveDataArray.push(txData)
+        this.arweaveDataArray.push({id:index,magnetLink:txData[0],title:txData[1],contentType:txData[2],dateUploaded:txData[3]})
 
       } catch (error) {
         console.log(error)
