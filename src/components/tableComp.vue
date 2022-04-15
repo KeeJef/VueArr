@@ -19,7 +19,7 @@ import { getRecentTxIds,getTxFromId } from '../composables/arweaveFunctions.js'
 import torrentComp from "./torrentComp.vue";
 
 export default {
-  name: "TorrentComp ",
+  name: "TableComp ",
   props: {
     contentType: String,
     title: String,

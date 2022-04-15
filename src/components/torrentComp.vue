@@ -15,7 +15,7 @@
 import {getSeedersAndLeechers} from '../composables/arweaveFunctions.js'
 
 export default {
-  name: "TorrentComp ",
+  name: "TorrentComp",
   props: {
     contentType: String,
     title: String,

@@ -1,0 +1,151 @@
+<template>
+  <button
+    @mouseover="hover = true"
+    @mouseleave="hover = false"
+    @mousedown="opened = !opened"
+    :class="{ active: hover }"
+    type="button"
+    class="uploadButton"
+  >
+    Upload Torrent 📁
+  </button>
+  <br />
+  <div v-if="opened" class="content" id="content" style="display: block">
+    <div class="formBox">
+      <label style="padding-right: 10px" for="Title">Content Title:</label>
+      <div id="contentTitle" class="inputField" contenteditable="true"></div>
+    </div>
+
+    <div class="formBox">
+      <label style="padding-right: 13px" for="Magnet">Magnet Link:</label>
+      <div id="magnetLink" class="inputField" contenteditable="true"></div>
+    </div>
+    <div class="formBox">
+      <label style="padding-right: 10px" for="Category"
+        >Content Category:
+      </label>
+      <select id="Category" name="Category" class="multiSelector">
+        <option value="Audio">Audio</option>
+        <option value="Video">Video</option>
+        <option value="Application">Application</option>
+        <option value="Game">Game</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <div class="inline-buttons">
+      <div class="getKey">
+        <input type="file" id="file" style="display: none" />
+        <button id="button" name="button" value="Upload" class="submitButton">
+          Submit Transaction ✅
+        </button>
+      </div>
+    </div>
+
+    <div class="txInfo" id="txInfo"></div>
+  </div>
+</template>
+
+<script>
+import {} from "../composables/arweaveFunctions.js";
+
+export default {
+  name: "TorrentComp ",
+  props: {},
+  data() {
+    return {
+      opened: false,
+      hover: false,
+    };
+  },
+};
+</script>
+
+<!-- Clean repetitive CSS  -->
+<style>
+.formBox {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.content {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  text-align: center;
+  padding: 20px;
+  width: 50%;
+  margin: 0 auto;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  display: block;
+}
+
+.inline-buttons {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+.inputField {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  -webkit-user-modify: read-write;
+  overflow-wrap: break-word;
+  -webkit-line-break: after-white-space;
+  display: inline-block;
+  white-space: pre-line;
+  text-align: left;
+  max-width: 65%;
+  min-width: 65%;
+  max-height: 90px;
+  min-height: 30px;
+  border-width: 2px;
+  border-style: inset;
+  border-color: grey;
+  border-radius: 0 !important;
+  background-color: white;
+  overflow: hidden;
+}
+.multiSelector {
+  width: 30%;
+  height: 34px;
+  border-width: 2px;
+  border-style: inset;
+  border-color: grey;
+  background-color: white;
+  border-radius: 0 !important;
+}
+.submitButton {
+  min-height: 34px;
+  border-radius: 0 !important;
+  border-width: 2px;
+  border-style: inset;
+  border-color: grey;
+  background-color: white;
+}
+.uploadButton {
+  display: block;
+  margin: 0 auto;
+  color: #444;
+  padding: 10px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background-color: #eee;
+}
+.active {
+  background: #ccc;
+}
+</style>
