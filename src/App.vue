@@ -19,6 +19,7 @@ import tableComp from "./components/tableComp.vue";
 import uploadTorrentComp from "./components/uploadTorrentComp.vue";
 import searchComp from "./components/searchComp.vue";
 
+
 export default {
   name: "App",
   components: {
@@ -26,6 +27,16 @@ export default {
     uploadTorrentComp,
     searchComp,
   },
+  async mounted(){
+    try {
+      //console.log(window.arweaveWallet)
+      await window.arweaveWallet.connect(["ACCESS_PUBLIC_KEY"])
+    } catch (error) {
+      console.log(error)
+    }
+    
+    
+  }
 };
 </script>
 
