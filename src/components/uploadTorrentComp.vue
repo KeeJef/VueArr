@@ -13,18 +13,33 @@
   <div v-if="opened" class="content" id="content" style="display: block">
     <div class="formBox">
       <label style="padding-right: 10px" for="Title">Content Title:</label>
-      <div id="contentTitle" class="inputField" contenteditable="true"></div>
+      <input
+        id="contentTitle"
+        class="inputField"
+        contenteditable="true"
+        v-model="contentTitle"
+      />
     </div>
 
     <div class="formBox">
       <label style="padding-right: 13px" for="Magnet">Magnet Link:</label>
-      <div id="magnetLink" class="inputField" contenteditable="true"></div>
+      <input
+        id="magnetLink"
+        class="inputField"
+        contenteditable="true"
+        v-model="magnetLink"
+      />
     </div>
     <div class="formBox">
       <label style="padding-right: 10px" for="Category"
         >Content Category:
       </label>
-      <select id="Category" name="Category" class="multiSelector">
+      <select
+        id="Category"
+        name="Category"
+        class="multiSelector"
+        v-model="contentType"
+      >
         <option value="Audio">Audio</option>
         <option value="Video">Video</option>
         <option value="Application">Application</option>
@@ -34,31 +49,62 @@
     </div>
 
     <div class="inline-buttons">
-      <div class="getKey">
-        <input type="file" id="file" style="display: none" />
-        <button id="button" name="button" value="Upload" class="submitButton" v-if="walletConnected">
-          Submit Transaction ✅
-        </button>
-      </div>
+      <input type="file" id="file" style="display: none" />
+      <button
+        id="button"
+        name="button"
+        value="Upload"
+        class="submitButton"
+        v-if="walletConnected"
+        @click="submitTransaction"
+      >
+        Submit Transaction ✅
+      </button>
+      <div class="txInfo" v-if="invalidTxSubmitted">{{ txFailureReason }}</div>
     </div>
-
-    <div class="txInfo" id="txInfo"></div>
   </div>
 </template>
 
 <script>
-import {} from "../composables/arweaveFunctions.js";
+import { validateInfo, generateTx } from "../composables/arweaveFunctions.js";
 
 export default {
   name: "TorrentComp ",
-  props:{
-    walletConnected: Boolean
+  props: {
+    walletConnected: Boolean,
   },
   data() {
     return {
       opened: false,
       hover: false,
+      txFailureReason: "",
+      invalidTxSubmitted: false,
+      contentType: String,
+      magnetLink: "",
+      contentTitle: "",
     };
+  },
+  methods: {
+    submitTransaction: async function () {
+      if (this.magnetLink && this.contentTitle && this.contentType) {
+        this.invalidTxSubmitted = false;
+
+        if ((await validateInfo(this.magnetLink)) === true) {
+          let unsignedTransaction = generateTx(this.magnetLink, this.contentTitle, this.contentType);
+          console.log(unsignedTransaction)
+          let signedTx = await window.arweaveWallet.sign(await unsignedTransaction)
+          console.log(signedTx)
+        
+        } else {
+          this.invalidTxSubmitted = true;
+          this.txFailureReason = "Invalid Magnet link";
+        }
+      } else {
+        console.log("Failure");
+        this.invalidTxSubmitted = true;
+        this.txFailureReason = "Please fill in all fields";
+      }
+    },
   },
 };
 </script>
@@ -93,10 +139,10 @@ export default {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  text-align: center;
-  display: flex;
+  /* text-align: center; */
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   padding-bottom: 10px;
 }
 .inputField {
@@ -151,5 +197,9 @@ export default {
 }
 .active {
   background: #ccc;
+}
+.txInfo {
+  padding-top: 5px;
+  color: red;
 }
 </style>
