@@ -36,7 +36,7 @@
     <div class="inline-buttons">
       <div class="getKey">
         <input type="file" id="file" style="display: none" />
-        <button id="button" name="button" value="Upload" class="submitButton">
+        <button id="button" name="button" value="Upload" class="submitButton" v-if="walletConnected">
           Submit Transaction ✅
         </button>
       </div>
@@ -51,7 +51,9 @@ import {} from "../composables/arweaveFunctions.js";
 
 export default {
   name: "TorrentComp ",
-  props: {},
+  props:{
+    walletConnected: Boolean
+  },
   data() {
     return {
       opened: false,
@@ -134,6 +136,7 @@ export default {
   border-style: inset;
   border-color: grey;
   background-color: white;
+  cursor: pointer;
 }
 .uploadButton {
   display: block;
@@ -143,6 +146,7 @@ export default {
   border: none;
   outline: none;
   font-size: 15px;
+  cursor: pointer;
   background-color: #eee;
 }
 .active {

@@ -127,6 +127,7 @@ export default {
   margin-left: 5px;
   border-radius: 0 !important;
   border-width: 2px;
+  cursor: pointer;
   border-style: inset;
   border-color: grey;
   background-color: white;

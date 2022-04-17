@@ -20,12 +20,6 @@ import torrentComp from "./torrentComp.vue";
 
 export default {
   name: "TableComp ",
-  props: {
-    contentType: String,
-    title: String,
-    dateUploaded: String,
-    magnetLink: String,
-  },
   data() {
     return {
       arweaveDataArray : [
