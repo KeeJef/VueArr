@@ -90,10 +90,11 @@ export default {
         this.invalidTxSubmitted = false;
 
         if ((await validateInfo(this.magnetLink)) === true) {
-          let unsignedTransaction = generateTx(this.magnetLink, this.contentTitle, this.contentType);
-          console.log(unsignedTransaction)
-          let signedTx = await window.arweaveWallet.sign(await unsignedTransaction)
-          console.log(signedTx)
+
+          let unsignedTransaction = await generateTx(this.magnetLink, this.contentTitle, this.contentType);
+          console.log(unsignedTransaction);
+          let submittedTransaction = await window.arweaveWallet.sign(unsignedTransaction);
+          console.log(submittedTransaction);
         
         } else {
           this.invalidTxSubmitted = true;

@@ -1,94 +1,33 @@
 <template>
-  <form class="searchForm" action="/search.php" name="q">
-    <div class="box">
-      <div>
-        <input
-          class="searchBox"
-          name="q"
-          type="search"
-          title="Search"
-          placeholder="Search"
-          autofocus=""
-          required=""
-          style="width: 30vw; padding: 4px"
-        />
-      </div>
-
-      <div>
-        <input
-          class="searchBoxButton"
-          type="submit"
-          title="Pirate Search"
-          name="search"
-          value="Search"
-          accesskey="s"
-        />
-      </div>
+  <div class="box">
+    <div>
+      <input class="searchBox" placeholder="Search" autofocus="" required="" />
     </div>
     <div>
-      <span class="form-box"
-        ><label title="All" for="all" accesskey="a"
-          ><input
-            name="all"
-            id="all"
-            type="checkbox"
-            onclick="setAll();"
-            checked=""
-          />All</label
-        ></span
-      >
-      <span class="form-box"
-        ><label title="Audio" for="audio" accesskey="q"
-          ><input
-            name="audio"
-            id="audio"
-            type="checkbox"
-            onclick="rmAll();"
-          />Audio</label
-        ></span
-      >
-      <span class="form-box"
-        ><label title="Video" for="video" accesskey="w"
-          ><input
-            name="video"
-            id="video"
-            type="checkbox"
-            onclick="rmAll();"
-          />Video</label
-        ></span
-      >
-      <span class="form-box"
-        ><label title="Applications" for="apps" accesskey="e"
-          ><input
-            name="apps"
-            id="apps"
-            type="checkbox"
-            onclick="rmAll();"
-          />Applications</label
-        ></span
-      >
-      <span class="form-box"
-        ><label title="Games" for="games" accesskey="r"
-          ><input
-            name="games"
-            id="games"
-            type="checkbox"
-            onclick="rmAll();"
-          />Games</label
-        ></span
-      >
-      <span class="form-box"
-        ><label title="Other" for="other" accesskey="y"
-          ><input
-            name="other"
-            id="other"
-            type="checkbox"
-            onclick="rmAll();"
-          />Other</label
-        ></span
-      >
+      <button class="searchBoxButton">Search</button>
     </div>
-  </form>
+  </div>
+
+  <div class="form-box">
+    <span class="form-box"
+      ><label><input type="checkbox" />All</label></span
+    >
+    <span class="form-box"
+      ><label><input type="checkbox" />Audio</label></span
+    >
+    <span class="form-box"
+      ><label><input type="checkbox" />Video</label></span
+    >
+    <span class="form-box"
+      ><label><input type="checkbox" />Applications</label></span
+    >
+    <span class="form-box"
+      ><label><input type="checkbox" />Games</label></span
+    >
+    <span class="form-box"
+      ><label><input type="checkbox" />Other</label></span
+    >
+  </div>
 </template>
 
 <script>
@@ -105,13 +44,6 @@ export default {
 
 <!-- Clean repetitive CSS  -->
 <style>
-.searchForm {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  padding-bottom: 20px;
-  text-align: center;
-}
 .box {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -123,7 +55,7 @@ export default {
   padding-bottom: 20px;
 }
 .searchBoxButton {
-  height: 30px;
+  height: 36px;
   margin-left: 5px;
   border-radius: 0 !important;
   border-width: 2px;
@@ -136,7 +68,6 @@ export default {
   height: 30px;
   border-radius: 0 !important;
   width: 30vw;
-  padding: 4px;
   border-width: 2px;
   border-style: inset;
   border-color: grey;
@@ -148,5 +79,6 @@ export default {
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   text-align: center;
+  padding-bottom: 20px;
 }
 </style>

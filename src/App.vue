@@ -49,9 +49,8 @@ export default {
   methods: {
     arconnect: async function () {
       try {
-        await window.arweaveWallet.connect(["SIGN_TRANSACTION"], {
-          name: "Arr",
-          logo: "Update this with Image",
+        await window.arweaveWallet.connect(['ACCESS_ADDRESS',"SIGN_TRANSACTION",'DISPATCH'], {
+          name: "Arr"
         });
         this.walletConnected = true
       } catch (error) {

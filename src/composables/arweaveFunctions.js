@@ -14,6 +14,8 @@ let stopWordArray = ["", "i", "me", "my", "myself", "we", "our", "ours", "oursel
 
 export async function getRecentTxIds() {
 
+// new way to get Tx data https://arwiki.wiki/#/en/creating-a-dapp-02#toc_Retrieving_transaction_data
+
     let txidArray = []
 
     const graphqlQuery = {
@@ -37,7 +39,7 @@ export async function getRecentTxIds() {
 
     for (let index = 0; index < res.data.data.transactions.edges.length; index++) {
         const element = res.data.data.transactions.edges[index].node.id;
-        txidArray.push(element)        
+        txidArray.push(element)
     }
 
     return txidArray
@@ -45,22 +47,21 @@ export async function getRecentTxIds() {
 
 export async function getTxFromId(txid) {
 
-    var data = await arweave.transactions.getData(txid)
-
     try {
+        var data = await arweave.transactions.getData(txid)
         data = JSON.parse(atob(data))
     } catch (error) {
         console.log(error)
         return
     }
-    
+
     return data
 }
 
-export async function getSeedersAndLeechers(magnetLink){
+export async function getSeedersAndLeechers(magnetLink) {
     console.log(magnetLink)
-    let response = await axios.get('https://cryptocommit.org/m/single?magnet='+ magnetLink);
-    console.log( await response)
+    let response = await axios.get('https://cryptocommit.org/m/single?magnet=' + magnetLink);
+    console.log(await response)
     return response.data
 }
 
@@ -74,7 +75,7 @@ export async function validateInfo(magnetLink) {
 
 }
 
-function getDate () {
+function getDate() {
     let today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //As January is 0.
@@ -85,23 +86,25 @@ function getDate () {
     return (mm + '/' + dd + '/' + yyyy);
 }
 
-export async function generateTx(magnetLink,contentTitle,contentType){
+export async function generateTx(magnetLink, contentTitle, contentType) {
 
     let arweaveTxData = []
     arweaveTxData.push(magnetLink, contentTitle, contentType, getDate())
     arweaveTxData = JSON.stringify(arweaveTxData);
 
-    //https://arwiki.wiki/#/en/creating-a-dapp-03
+    try {
 
-    let tx = await arweave.createTransaction({
-        data: arweaveTxData
-    });
+        var tx = await arweave.createTransaction({
+            data: arweaveTxData
+        });
+
+    } catch (error) {
+        console.log(error)
+    }
 
     //remove numbers and special characters from the contentTitle replace periods with spaces, remove trailing and leading spaces
     let contentTitleLowerCase = contentTitle.replace(/[^a-zA-Z\s.]/g, "").replace(/\./g, " ").trim()
     let contentTitleArray = contentTitleLowerCase.split(" ")
-
-    console.log(contentTitleArray)
 
     //filter out words in stop word array
     contentTitleArray = contentTitleArray.filter(function (val) {
@@ -116,7 +119,38 @@ export async function generateTx(magnetLink,contentTitle,contentType){
 
         tx.addTag('name', element)
     }
-
     return tx
+}
 
+
+export async function searchTx(searchPhrase, contentType) {
+    searchPhrase = searchPhrase.toLowerCase()
+    let namesArray = searchPhrase.split(" ")
+    namesArray = JSON.stringify(namesArray)
+
+    let query = `query {
+        transactions(
+        tags: [
+            { name: "ArrTorrent", values: [""] }
+            { name: "name", values: `+ namesArray + ` }
+        ]
+        ) {
+        edges {
+            node {
+            id
+            }
+        }
+        }
+    }`
+
+    let response = await fetch(`https://arweave.net/graphql`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            query,
+        }),
+    })
+
+    let data = await response.json()
+    return data;
 }
