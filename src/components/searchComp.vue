@@ -1,10 +1,10 @@
 <template>
   <div class="box">
     <div>
-      <input class="searchBox" placeholder="Search" autofocus="" required="" />
+      <input class="searchBox" placeholder="Search" autofocus="" required="" v-model="searchValue"/>
     </div>
     <div>
-      <button class="searchBoxButton">Search</button>
+      <button class="searchBoxButton" @click="search">Search</button>
     </div>
   </div>
 
@@ -31,14 +31,35 @@
 </template>
 
 <script>
-import {} from "../composables/arweaveFunctions.js";
+import {searchTx, getTxFromId } from "../composables/arweaveFunctions.js";
 
 export default {
   name: "SearchComp",
   props: {},
   data() {
-    return {};
+    return {
+      searchValue: "",
+    };
   },
+  methods:{
+    search: async function(){
+      
+      if(this.searchValue){
+        try {
+          var txidArray = await searchTx(this.searchValue)
+        } catch (error) {
+          console.log(error)
+        }
+
+        //loop through txidArray and get tx from each txid
+        for(let i = 0; i < txidArray.length; i++){
+          let tx = await getTxFromId(txidArray[i])
+          console.log(tx)
+        }
+      }
+
+    }
+  }
 };
 </script>
 

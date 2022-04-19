@@ -14,13 +14,11 @@ let stopWordArray = ["", "i", "me", "my", "myself", "we", "our", "ours", "oursel
 
 export async function getRecentTxIds() {
 
-// new way to get Tx data https://arwiki.wiki/#/en/creating-a-dapp-02#toc_Retrieving_transaction_data
-
     let txidArray = []
 
     const graphqlQuery = {
         query: `{
-    transactions(tags: [{ name: "ArrTorrent", values: "" }]) {
+    transactions(tags: [{ name: "Arr", values: "" }]) {
         edges {
         node {
             id
@@ -48,6 +46,7 @@ export async function getRecentTxIds() {
 export async function getTxFromId(txid) {
 
     try {
+        console.log("txid: " + txid)
         var data = await arweave.transactions.getData(txid)
         data = JSON.parse(atob(data))
     } catch (error) {
@@ -100,10 +99,12 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
 
     } catch (error) {
         console.log(error)
+        return "Failed to create TX"
     }
 
     //remove numbers and special characters from the contentTitle replace periods with spaces, remove trailing and leading spaces
-    let contentTitleLowerCase = contentTitle.replace(/[^a-zA-Z\s.]/g, "").replace(/\./g, " ").trim()
+    let contentTitleLowerCase = contentTitle.toLowerCase()
+    contentTitleLowerCase.replace(/[^a-zA-Z\s.]/g, "").replace(/\./g, " ").trim()
     let contentTitleArray = contentTitleLowerCase.split(" ")
 
     //filter out words in stop word array
@@ -111,7 +112,7 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         return stopWordArray.indexOf(val) == -1;
     });
 
-    tx.addTag('ArrTorrent')
+    tx.addTag('Arr')
     tx.addTag('category', contentType)
 
     for (let index = 0; index < contentTitleArray.length; index++) {
@@ -119,19 +120,40 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
 
         tx.addTag('name', element)
     }
-    return tx
+
+    try {
+
+        var signedTransaction = await window.arweaveWallet.sign(tx);
+        console.log(signedTransaction);
+        
+    } catch (error) {
+        console.log(error)
+        return "Failed to sign TX"
+    }
+
+    try {
+        var submittedTransaction = await arweave.transactions.post(signedTransaction);
+        console.log(submittedTransaction);
+    } catch (error) {
+        console.log(error)
+        return "Failed to post TX"
+    }
+
+    return "Successfully posted TX"
+
 }
 
 
-export async function searchTx(searchPhrase, contentType) {
-    searchPhrase = searchPhrase.toLowerCase()
+export async function searchTx(searchPhrase) {
+    let txidArray = []
+    //searchPhrase = searchPhrase.toLowerCase()
     let namesArray = searchPhrase.split(" ")
     namesArray = JSON.stringify(namesArray)
 
     let query = `query {
         transactions(
         tags: [
-            { name: "ArrTorrent", values: [""] }
+            { name: "Arr", values: [""] }
             { name: "name", values: `+ namesArray + ` }
         ]
         ) {
@@ -143,14 +165,21 @@ export async function searchTx(searchPhrase, contentType) {
         }
     }`
 
-    let response = await fetch(`https://arweave.net/graphql`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+    let res = await axios({
+        url: endpoint,
+        method: "POST",
+        headers: headers,
+        data: JSON.stringify({
             query,
         }),
-    })
+    });
 
-    let data = await response.json()
-    return data;
+    console.log("finished lookup")
+
+    for (let index = 0; index < res.data.data.transactions.edges.length; index++) {
+        const element = res.data.data.transactions.edges[index].node.id;
+        txidArray.push(element)
+    }
+
+    return txidArray;
 }

@@ -4,17 +4,15 @@
     @mouseleave="hover = false"
     @mousedown="opened = !opened"
     :class="{ active: hover }"
-    type="button"
     class="uploadButton"
   >
     Upload Torrent 📁
   </button>
   <br />
-  <div v-if="opened" class="content" id="content" style="display: block">
+  <div v-if="opened" class="content">
     <div class="formBox">
-      <label style="padding-right: 10px" for="Title">Content Title:</label>
+      <label style="padding-right: 10px">Content Title:</label>
       <input
-        id="contentTitle"
         class="inputField"
         contenteditable="true"
         v-model="contentTitle"
@@ -22,21 +20,18 @@
     </div>
 
     <div class="formBox">
-      <label style="padding-right: 13px" for="Magnet">Magnet Link:</label>
+      <label style="padding-right: 13px">Magnet Link:</label>
       <input
-        id="magnetLink"
         class="inputField"
         contenteditable="true"
         v-model="magnetLink"
       />
     </div>
     <div class="formBox">
-      <label style="padding-right: 10px" for="Category"
+      <label style="padding-right: 10px"
         >Content Category:
       </label>
       <select
-        id="Category"
-        name="Category"
         class="multiSelector"
         v-model="contentType"
       >
@@ -49,19 +44,16 @@
     </div>
 
     <div class="inline-buttons">
-      <input type="file" id="file" style="display: none" />
       <button
-        id="button"
-        name="button"
-        value="Upload"
         class="submitButton"
         v-if="walletConnected"
         @click="submitTransaction"
       >
         Submit Transaction ✅
-      </button>
-      <div class="txInfo" v-if="invalidTxSubmitted">{{ txFailureReason }}</div>
+      </button><div class="loader"></div>
+      <div class="txInfo" v-if="txInfoRequired">{{ txInfo }}</div>
     </div>
+    
   </div>
 </template>
 
@@ -77,8 +69,8 @@ export default {
     return {
       opened: false,
       hover: false,
-      txFailureReason: "",
-      invalidTxSubmitted: false,
+      txInfo: "",
+      txInfoRequired: false,
       contentType: String,
       magnetLink: "",
       contentTitle: "",
@@ -87,23 +79,26 @@ export default {
   methods: {
     submitTransaction: async function () {
       if (this.magnetLink && this.contentTitle && this.contentType) {
-        this.invalidTxSubmitted = false;
+        this.txInfoRequired = false;
 
         if ((await validateInfo(this.magnetLink)) === true) {
+          let status = await generateTx(
+            this.magnetLink,
+            this.contentTitle,
+            this.contentType
+          );
+          console.log(status);
 
-          let unsignedTransaction = await generateTx(this.magnetLink, this.contentTitle, this.contentType);
-          console.log(unsignedTransaction);
-          let submittedTransaction = await window.arweaveWallet.sign(unsignedTransaction);
-          console.log(submittedTransaction);
-        
+          this.txInfoRequired = true;
+          this.txInfo = status;
         } else {
-          this.invalidTxSubmitted = true;
-          this.txFailureReason = "Invalid Magnet link";
+          this.txInfoRequired = true;
+          this.txInfo = "Invalid Magnet link";
         }
       } else {
         console.log("Failure");
-        this.invalidTxSubmitted = true;
-        this.txFailureReason = "Please fill in all fields";
+        this.txInfoRequired = true;
+        this.txInfo = "Please fill in all fields";
       }
     },
   },
@@ -145,6 +140,8 @@ export default {
   align-items: center;
   justify-content: center; */
   padding-bottom: 10px;
+  text-align: center;
+  width: 100%;
 }
 .inputField {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -184,6 +181,7 @@ export default {
   border-color: grey;
   background-color: white;
   cursor: pointer;
+  margin-right: 5px;
 }
 .uploadButton {
   display: block;
@@ -201,6 +199,24 @@ export default {
 }
 .txInfo {
   padding-top: 5px;
-  color: red;
+}
+
+.loader {
+  display: inline-block;
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  border: solid 4px;
+  border-color: #000000 #00000010 #00000010;
+  animation-name: spin;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
