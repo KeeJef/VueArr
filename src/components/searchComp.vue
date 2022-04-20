@@ -1,37 +1,50 @@
 <template>
-  <div class="box">
-    <div>
-      <input class="searchBox" placeholder="Search" autofocus="" required="" v-model="searchValue"/>
-    </div>
-    <div>
-      <button class="searchBoxButton" @click="search">Search</button>
-    </div>
-  </div>
 
-  <div class="form-box">
-    <span class="form-box"
-      ><label><input type="checkbox" />All</label></span
-    >
-    <span class="form-box"
-      ><label><input type="checkbox" />Audio</label></span
-    >
-    <span class="form-box"
-      ><label><input type="checkbox" />Video</label></span
-    >
-    <span class="form-box"
-      ><label><input type="checkbox" />Applications</label></span
-    >
-    <span class="form-box"
-      ><label><input type="checkbox" />Games</label></span
-    >
-    <span class="form-box"
-      ><label><input type="checkbox" />Other</label></span
-    >
-  </div>
+    <div class="box">
+      <div>
+        <input
+          class="searchBox"
+          placeholder="Search"
+          autofocus=""
+          required=""
+          v-model="searchValue"
+        />
+      </div>
+      <div>
+        <button class="searchBoxButton" @click="search">
+          {{buttonValue}}
+        </button>
+      </div>
+    </div>
+
+    <!-- Fix this so i can use vmodel -->
+
+    <div class="form-box">
+
+      <span class="form-box"
+        ><label><input type="checkbox" />All</label></span
+      >
+      <span class="form-box"
+        ><label><input type="checkbox" />Audio</label></span
+      >
+      <span class="form-box"
+        ><label><input type="checkbox" />Video</label></span
+      >
+      <span class="form-box"
+        ><label><input type="checkbox" />Applications</label></span
+      >
+      <span class="form-box"
+        ><label><input type="checkbox" />Games</label></span
+      >
+      <span class="form-box"
+        ><label><input type="checkbox" />Other</label></span
+      >
+    </div>
 </template>
 
 <script>
-import {searchTx, getTxFromId } from "../composables/arweaveFunctions.js";
+import { searchTx, getTxFromId } from "../composables/arweaveFunctions.js";
+import { store } from "./tableComp.vue";
 
 export default {
   name: "SearchComp",
@@ -39,27 +52,47 @@ export default {
   data() {
     return {
       searchValue: "",
+      store,
+      buttonValue : "Search",
     };
   },
-  methods:{
-    search: async function(){
-      
-      if(this.searchValue){
+  methods: {
+    search: async function () {
+      this.buttonValue = "Searching..."
+      let txArray = [];
+      if (this.searchValue) {
         try {
-          var txidArray = await searchTx(this.searchValue)
+          var txidArray = await searchTx(this.searchValue);
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
-
         //loop through txidArray and get tx from each txid
-        for(let i = 0; i < txidArray.length; i++){
-          let tx = await getTxFromId(txidArray[i])
-          console.log(tx)
-        }
-      }
+        for (let i = 0; i < txidArray.length; i++) {
+          let txData = await getTxFromId(txidArray[i]);
 
-    }
-  }
+          //if txData[2] is 
+
+          txArray.push({
+            id: i,
+            magnetLink: txData[0],
+            title: txData[1],
+            contentType: txData[2],
+            dateUploaded: txData[3],
+          });
+        }
+        store.arweaveDataArray = txArray;
+      }
+      this.buttonValue = "Search"
+    },
+  },
+  //I don't know why this was required instead of @keydown.enter in the button
+   mounted() {
+    window.addEventListener("keypress", (e) => {
+      if (e.keyCode === 13) {
+        this.search();
+      }
+    })
+    },
 };
 </script>
 

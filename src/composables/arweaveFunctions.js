@@ -1,7 +1,11 @@
 import axios from "axios";
 import Arweave from 'arweave';
 
-const arweave = Arweave.init({});
+const arweave = Arweave.init({
+  host: '188.166.200.45',
+  port: 1984,
+  protocol: 'http'
+});
 
 const endpoint = "https://arweave.net/graphql";
 const headers = {
@@ -128,7 +132,7 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         
     } catch (error) {
         console.log(error)
-        return "Failed to sign TX"
+        return "TX signature failed"
     }
 
     try {
@@ -136,17 +140,17 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         console.log(submittedTransaction);
     } catch (error) {
         console.log(error)
-        return "Failed to post TX"
+        return "TX post failed"
     }
 
-    return "Successfully posted TX"
+    return "TX success"
 
 }
 
 
 export async function searchTx(searchPhrase) {
     let txidArray = []
-    //searchPhrase = searchPhrase.toLowerCase()
+    searchPhrase = searchPhrase.toLowerCase()
     let namesArray = searchPhrase.split(" ")
     namesArray = JSON.stringify(namesArray)
 

@@ -50,7 +50,7 @@
         @click="submitTransaction"
       >
         Submit Transaction ✅
-      </button><div class="loader"></div>
+      </button><div v-if="submissionLoader" class="loader"></div>
       <div class="txInfo" v-if="txInfoRequired">{{ txInfo }}</div>
     </div>
     
@@ -70,6 +70,7 @@ export default {
       opened: false,
       hover: false,
       txInfo: "",
+      submissionLoader: false,
       txInfoRequired: false,
       contentType: String,
       magnetLink: "",
@@ -78,6 +79,7 @@ export default {
   },
   methods: {
     submitTransaction: async function () {
+      this.submissionLoader = true;
       if (this.magnetLink && this.contentTitle && this.contentType) {
         this.txInfoRequired = false;
 
@@ -87,6 +89,7 @@ export default {
             this.contentTitle,
             this.contentType
           );
+          
           console.log(status);
 
           this.txInfoRequired = true;
@@ -100,6 +103,10 @@ export default {
         this.txInfoRequired = true;
         this.txInfo = "Please fill in all fields";
       }
+      this.submissionLoader = false;
+      this.magnetLink = "" 
+      this.contentTitle = ""
+      this.contentType = ""
     },
   },
 };
@@ -135,13 +142,11 @@ export default {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  /* text-align: center; */
-  /* display: flex;
-  align-items: center;
-  justify-content: center; */
   padding-bottom: 10px;
-  text-align: center;
-  width: 100%;
+    display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
 }
 .inputField {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -181,7 +186,7 @@ export default {
   border-color: grey;
   background-color: white;
   cursor: pointer;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 .uploadButton {
   display: block;
@@ -207,7 +212,7 @@ export default {
   height: 17px;
   border-radius: 50%;
   border: solid 4px;
-  border-color: #000000 #00000010 #00000010;
+  border-color: #005cc8 #005cc8 #00000010;
   animation-name: spin;
   animation-duration: 1s;
   animation-iteration-count: infinite;

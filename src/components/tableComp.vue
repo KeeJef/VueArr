@@ -1,4 +1,5 @@
 <template>
+<div v-if="loading" class="loadingBar" >Loading recent torrents</div>
   <div class="loadedTorrentBox">
     <table id="torrentTable">
       <tr>
@@ -9,58 +10,92 @@
         <th>Seeders</th>
         <th>Leachers</th>
       </tr>
-      <torrentComp v-for="arweaveData in arweaveDataArray" :key="arweaveData.id" :contentType = "arweaveData.contentType" :title = "arweaveData.title" :dateUploaded = "arweaveData.dateUploaded" :magnetLink = "arweaveData.magnetLink"/>
+      <torrentComp
+        v-for="arweaveData in store.arweaveDataArray"
+        :key="arweaveData.id"
+        :contentType="arweaveData.contentType"
+        :title="arweaveData.title"
+        :dateUploaded="arweaveData.dateUploaded"
+        :magnetLink="arweaveData.magnetLink"
+      />
     </table>
   </div>
 </template>
 
 <script>
-import { getRecentTxIds,getTxFromId } from '../composables/arweaveFunctions.js'
+import {
+  getRecentTxIds,
+  getTxFromId,
+} from "../composables/arweaveFunctions.js";
 import torrentComp from "./torrentComp.vue";
+import { reactive } from 'vue'
+
+export const store = reactive({
+  arweaveDataArray: [],
+})
 
 export default {
   name: "TableComp ",
   data() {
     return {
-      arweaveDataArray : [
-        
-      ]
+      store,
+      loading: true,
     };
   },
   components: {
     torrentComp,
   },
-  methods :{
-
-  },
+  methods: {},
 
   async mounted() {
-
     try {
-      var txidArray = await getRecentTxIds()
+      var txidArray = await getRecentTxIds();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
     for (let index = 0; index < txidArray.length; index++) {
       const element = txidArray[index];
 
       try {
-        let txData = await getTxFromId(element)
-        this.arweaveDataArray.push({id:index,magnetLink:txData[0],title:txData[1],contentType:txData[2],dateUploaded:txData[3]})
-
+        let txData = await getTxFromId(element);
+        store.arweaveDataArray.push({
+          id: index,
+          magnetLink: txData[0],
+          title: txData[1],
+          contentType: txData[2],
+          dateUploaded: txData[3],
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-      
     }
-    
+    this.loading = false;
   },
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
+.loadingBar{
+  text-align: center;
+  font-size: 1.5em;
+}
+
+    .loadingBar::after {
+      display: inline-block;
+      animation: dotty steps(1,end) 1s infinite;
+      content: '';
+    }
+    
+    @keyframes dotty {
+        0%   { content: ''; }
+        25%  { content: '.'; }
+        50%  { content: '..'; }
+        75%  { content: '...'; }
+        100% { content: ''; }
+    }
+
 .loadedTorrentBox {
   padding-top: 10px;
   display: flex;

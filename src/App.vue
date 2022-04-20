@@ -11,7 +11,7 @@
     >
       Arconnect 💵
     </button>
-    <button class="arconnectButton" v-if="walletConnected" >🟢</button>
+    <button class="arconnectButton" v-if="walletConnected">🟢</button>
   </div>
   <div class="titleImage">
     <a href=""><img class="logoSize" src="./assets/nav-logo.png" /></a>
@@ -43,19 +43,22 @@ export default {
     return {
       opened: false,
       hover: false,
-      walletConnected: false
+      walletConnected: false,
     };
   },
   methods: {
     arconnect: async function () {
       try {
-        await window.arweaveWallet.connect(['ACCESS_ADDRESS',"SIGN_TRANSACTION",'DISPATCH'], {
-          name: "Arr"
-        });
-        this.walletConnected = true
+        await window.arweaveWallet.connect(
+          ["ACCESS_ADDRESS", "SIGN_TRANSACTION", "DISPATCH"],
+          {
+            name: "Arr",
+          }
+        );
+        this.walletConnected = true;
       } catch (error) {
         console.log(error);
-         this.walletConnected = false
+        this.walletConnected = false;
       }
     },
   },
