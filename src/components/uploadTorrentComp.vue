@@ -49,8 +49,9 @@
         v-if="walletConnected"
         @click="submitTransaction"
       >
-        Submit Transaction ✅
+        Submit Transaction ✨
       </button><div v-if="submissionLoader" class="loader"></div>
+      <div class="connectWallet" v-if="!walletConnected">Connect Arconnect to submit torrents 💵</div>
       <div class="txInfo" v-if="txInfoRequired">{{ txInfo }}</div>
     </div>
     
@@ -96,7 +97,7 @@ export default {
           this.txInfo = status;
         } else {
           this.txInfoRequired = true;
-          this.txInfo = "Invalid Magnet link";
+          this.txInfo = "Invalid Magnet link ❌";
         }
       } else {
         console.log("Failure");
@@ -188,6 +189,11 @@ export default {
   cursor: pointer;
   margin-right: 10px;
 }
+
+.connectWallet{
+  color: green;
+}
+
 .uploadButton {
   display: block;
   margin: 0 auto;

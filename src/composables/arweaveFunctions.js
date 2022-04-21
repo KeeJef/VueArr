@@ -132,7 +132,7 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         
     } catch (error) {
         console.log(error)
-        return "TX signature failed"
+        return "TX signature failed ❌" 
     }
 
     try {
@@ -140,10 +140,10 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         console.log(submittedTransaction);
     } catch (error) {
         console.log(error)
-        return "TX post failed"
+        return "TX post failed ❌"
     }
 
-    return "TX success"
+    return "TX success ✅"
 
 }
 
@@ -155,7 +155,7 @@ export async function searchTx(searchPhrase) {
     namesArray = JSON.stringify(namesArray)
 
     let query = `query {
-        transactions(
+        transactions(first:20
         tags: [
             { name: "Arr", values: [""] }
             { name: "name", values: `+ namesArray + ` }
