@@ -22,24 +22,25 @@
     <div class="form-box">
 
       <span class="form-box"
-        ><label><input type="checkbox" />All</label></span
+        ><label><input type="checkbox" value="All" v-model="checkboxContentType"/>All</label></span
       >
       <span class="form-box"
-        ><label><input type="checkbox" />Audio</label></span
+        ><label><input type="checkbox" value="Audio" v-model="checkboxContentType"/>Audio</label></span
       >
       <span class="form-box"
-        ><label><input type="checkbox" />Video</label></span
+        ><label><input type="checkbox" value="Video" v-model="checkboxContentType"/>Video</label></span
       >
       <span class="form-box"
-        ><label><input type="checkbox" />Applications</label></span
+        ><label><input type="checkbox" value="Application" v-model="checkboxContentType"/>Applications</label></span
       >
       <span class="form-box"
-        ><label><input type="checkbox" />Games</label></span
+        ><label><input type="checkbox" value="Games" v-model="checkboxContentType"/>Games</label></span
       >
       <span class="form-box"
-        ><label><input type="checkbox" />Other</label></span
+        ><label><input type="checkbox" value="Other" v-model="checkboxContentType"/>Other</label></span
       >
     </div>
+    
 </template>
 
 <script>
@@ -54,6 +55,7 @@ export default {
       searchValue: "",
       store,
       buttonValue : "Search",
+      checkboxContentType: ["All"]
     };
   },
   methods: {
@@ -70,8 +72,7 @@ export default {
         for (let i = 0; i < txidArray.length; i++) {
           let txData = await getTxFromId(txidArray[i]);
 
-          //if txData[2] is 
-
+          if (this.checkboxContentType.includes("All") || this.checkboxContentType.includes(txData[2])) {
           txArray.push({
             id: i,
             magnetLink: txData[0],
@@ -79,6 +80,7 @@ export default {
             contentType: txData[2],
             dateUploaded: txData[3],
           });
+          }
         }
         store.arweaveDataArray = txArray;
       }
