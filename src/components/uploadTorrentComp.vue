@@ -137,6 +137,7 @@ export default {
   overflow: hidden;
   background-color: #f1f1f1;
   display: block;
+  max-width: 600px;
 }
 
 .inline-buttons {

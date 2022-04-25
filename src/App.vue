@@ -9,9 +9,10 @@
       type="button"
       class="arconnectButton"
     >
-      Arconnect 💵
+      Arconnect
+      <span v-if="!walletConnected">💵</span>
+      <span v-if="walletConnected">🟢</span>
     </button>
-    <button class="arconnectButton" v-if="walletConnected">🟢</button>
   </div>
   <div class="titleImage">
     <a href=""><img class="logoSize" src="./assets/nav-logo.png" /></a>
@@ -72,6 +73,7 @@ export default {
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   text-align: center;
 }
+
 .recentTorrents {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -88,10 +90,14 @@ export default {
   font-size: 15px;
   cursor: pointer;
   background-color: #eee;
+  display: block;
+  margin-left: auto;
+  margin-right: 0;
 }
 .connectHeader {
-  text-align: right;
-  width: 90%;
+  margin: 0 auto;
+  max-width: 1200px;
+  text-align: center;
 }
 .active {
   background: #ccc;

@@ -6,13 +6,13 @@
     <td>
       <span class="magnetSpan"> <a v-bind:href="magnetLink">🧲</a></span>
     </td>
-    <td>{{seeders}}</td>
-    <td>{{leechers}}</td>
+    <td>{{ seeders }}</td>
+    <td>{{ leechers }}</td>
   </tr>
 </template>
 
 <script>
-import {getSeedersAndLeechers} from '../composables/arweaveFunctions.js'
+import { getSeedersAndLeechers } from "../composables/arweaveFunctions.js";
 
 export default {
   name: "TorrentComp",
@@ -22,22 +22,21 @@ export default {
     dateUploaded: String,
     magnetLink: String,
   },
-  data(){
-    return{
+  data() {
+    return {
       seeders: "",
-      leechers: ""
+      leechers: "",
+    };
+  },
+  async mounted() {
+    try {
+      var seedLeechData = await getSeedersAndLeechers(btoa(this.magnetLink));
+      this.seeders = await seedLeechData.seeds;
+      this.leechers = await seedLeechData.leechers;
+    } catch (error) {
+      console.log(error);
     }
   },
-  async mounted () {
-
-    try {
-      var seedLeechData = await getSeedersAndLeechers(btoa(this.magnetLink))
-      this.seeders = await seedLeechData.seeds 
-      this.leechers = await seedLeechData.leechers
-    } catch (error) {
-      console.log(error)
-    }
-  }
 };
 </script>
 
@@ -52,5 +51,14 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.magnetSpan {
+  transform: rotate(270deg);
+  display: inline-block;
+}
+
+.magnetSpan a {
+  text-decoration: none;
 }
 </style>

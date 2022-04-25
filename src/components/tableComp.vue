@@ -106,6 +106,7 @@ export default {
 #torrentTable {
   width: 80%;
   border-collapse: collapse;
+  max-width: 1200px;
 }
 
 #torrentTable td,
