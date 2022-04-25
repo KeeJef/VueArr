@@ -67,6 +67,7 @@ export default {
 </script>
 
 <style>
+
 .titleImage {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -98,8 +99,21 @@ export default {
   margin: 0 auto;
   max-width: 1200px;
   text-align: center;
+  width: 80%;
 }
 .active {
   background: #ccc;
 }
+
+@media screen and (max-width: 700px) {
+  .logoSize{
+    width: 50%;
+    min-width: 200px;
+  }
+  .connectHeader {
+    width: 100%;
+    padding-bottom: 10px;
+  }
+}
+
 </style>

@@ -45,6 +45,7 @@ export default {
 table {
   border-collapse: collapse;
   background-color: #f2f2f2;
+  table-layout: auto
 }
 
 body {

@@ -115,6 +115,7 @@ export default {
 
 <!-- Clean repetitive CSS  -->
 <style>
+
 .formBox {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -229,6 +230,12 @@ export default {
 @keyframes spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .content{
+      width: 80%;
   }
 }
 </style>

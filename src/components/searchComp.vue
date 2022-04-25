@@ -137,4 +137,10 @@ export default {
   text-align: center;
   padding-bottom: 20px;
 }
+
+@media screen and (max-width: 700px) {
+  .searchBox{
+      width: 65vw;
+  }
+}
 </style>
