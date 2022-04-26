@@ -2,9 +2,10 @@ import axios from "axios";
 import Arweave from 'arweave';
 
 const arweave = Arweave.init({
-  host: '188.166.200.45',
-  port: 1984,
-  protocol: 'http'
+    host: 'arweave.net',
+    port: 443,
+    protocol: 'https',
+    timeout: 20000
 });
 
 const endpoint = "https://arweave.net/graphql";
@@ -22,7 +23,7 @@ export async function getRecentTxIds() {
 
     const graphqlQuery = {
         query: `{
-    transactions(tags: [{ name: "Arr", values: "" }]) {
+    transactions(tags: [{ name: "Arrr", values: "" }]) {
         edges {
         node {
             id
@@ -51,20 +52,23 @@ export async function getTxFromId(txid) {
 
     try {
         console.log("txid: " + txid)
-        var data = await arweave.transactions.getData(txid)
-        data = JSON.parse(atob(data))
+        var data = await arweave.api.get(txid)
     } catch (error) {
         console.log(error)
         return
     }
 
-    return data
+    return data.data
 }
 
 export async function getSeedersAndLeechers(magnetLink) {
-    console.log(magnetLink)
-    let response = await axios.get('https://cryptocommit.org/m/single?magnet=' + magnetLink);
-    console.log(await response)
+
+    let response = await axios({
+        url: "https://cryptocommit.org/m/single?magnet=" + magnetLink,
+        method: "GET",
+        headers: headers,
+    });
+
     return response.data
 }
 
@@ -103,7 +107,7 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
 
     } catch (error) {
         console.log(error)
-        return "Failed to create TX"
+        return "Failed to create TX, please try again"
     }
 
     //remove numbers and special characters from the contentTitle replace periods with spaces, remove trailing and leading spaces
@@ -116,7 +120,7 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         return stopWordArray.indexOf(val) == -1;
     });
 
-    tx.addTag('Arr')
+    tx.addTag('Arrr')
     tx.addTag('category', contentType)
 
     for (let index = 0; index < contentTitleArray.length; index++) {
@@ -143,7 +147,7 @@ export async function generateTx(magnetLink, contentTitle, contentType) {
         return "TX post failed ❌"
     }
 
-    return "TX success ✅"
+    return "TX success, will display within 10 mins ✅"
 
 }
 
@@ -157,7 +161,7 @@ export async function searchTx(searchPhrase) {
     let query = `query {
         transactions(first:20
         tags: [
-            { name: "Arr", values: [""] }
+            { name: "Arrr", values: [""] }
             { name: "name", values: `+ namesArray + ` }
         ]
         ) {

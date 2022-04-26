@@ -1,31 +1,30 @@
 <template>
-  <!-- Make sure we provide an option for darkmode logo -->
-  <div class="connectHeader">
-    <button
-      @mouseover="hover = true"
-      @mouseleave="hover = false"
-      @mousedown="arconnect"
-      :class="{ active: hover }"
-      type="button"
-      class="arconnectButton"
-    >
-      Arconnect
-      <span v-if="!walletConnected">💵</span>
-      <span v-if="walletConnected">🟢</span>
-    </button>
-  </div>
-  <div class="titleImage">
-    <a href=""><img class="logoSize" src="./assets/nav-logo.png" /></a>
-  </div>
-  <div class="recentTorrents">
-    <strong>Search Torrents</strong> |
-    <a href="/search.php?q=top100:recent" title="Recent Torrents"
-      >Recent&nbsp;Torrents</a
-    >
-  </div>
-  <searchComp />
-  <uploadTorrentComp :walletConnected="walletConnected" />
-  <tableComp />
+    <div class="connectHeader">
+      <button
+        @mouseover="hover = true"
+        @mouseleave="hover = false"
+        @mousedown="arconnect"
+        :class="{ active: hover }"
+        type="button"
+        class="arconnectButton"
+      >
+        {{arconnectStatus}} 
+        <span v-if="!walletConnected">💵</span>
+        <span v-if="walletConnected">🟢</span>
+      </button>
+    </div>
+    <div class="titleImage">
+      <a href="."><img class="logoSize" src="./assets/nav-logo.png" /></a>
+    </div>
+    <div class="recentTorrents">
+      <strong>Search Torrents</strong> |
+      <a href="." title="Recent Torrents"
+        >Recent&nbsp;Torrents</a
+      >
+    </div>
+    <searchComp />
+    <uploadTorrentComp :walletConnected="walletConnected" />
+    <tableComp />
 </template>
 
 <script>
@@ -44,7 +43,8 @@ export default {
     return {
       opened: false,
       hover: false,
-      walletConnected: false,
+      walletConnected: null,
+      arconnectStatus: "Arconnect"
     };
   },
   methods: {
@@ -59,6 +59,7 @@ export default {
         this.walletConnected = true;
       } catch (error) {
         console.log(error);
+        this.arconnectStatus = "Arconnect extension not found"
         this.walletConnected = false;
       }
     },
@@ -67,7 +68,6 @@ export default {
 </script>
 
 <style>
-
 .titleImage {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
@@ -106,7 +106,7 @@ export default {
 }
 
 @media screen and (max-width: 700px) {
-  .logoSize{
+  .logoSize {
     width: 50%;
     min-width: 200px;
   }
@@ -115,5 +115,4 @@ export default {
     padding-bottom: 10px;
   }
 }
-
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loadingBar">Loading recent torrents</div>
+  <div v-if="loading" class="loadingBar">Loading 10 most recent torrents</div>
   <div class="loadedTorrentBox">
     <table id="torrentTable">
       <tr>
