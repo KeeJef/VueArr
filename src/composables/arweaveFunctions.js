@@ -186,7 +186,10 @@ export async function searchTx(searchPhrase) {
 
     for (let index = 0; index < res.data.data.transactions.edges.length; index++) {
         const element = res.data.data.transactions.edges[index].node.id;
-        txidArray.push(element)
+        //if the element is not in txidArray, add it
+        if (txidArray.indexOf(element) == -1) {
+            txidArray.push(element)
+        }
     }
 
     return txidArray;
